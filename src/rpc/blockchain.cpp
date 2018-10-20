@@ -21,6 +21,7 @@
 #include "util.h"
 #include "utilstrencodings.h"
 #include "hash.h"
+#include "komodo_rpcblockchain.h"
 
 #include <stdint.h>
 

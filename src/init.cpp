@@ -980,6 +980,8 @@ bool AppInitBasicSetup()
 
 bool AppInitParameterInteraction()
 {
+    int32_t komodo_init();
+    komodo_init();
     const CChainParams& chainparams = Params();
     // ********************************************************* Step 2: parameter interactions
 
