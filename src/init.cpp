@@ -51,6 +51,8 @@
 #include "masternodeconfig.h"
 #include "spork.h"
 #include "signhelper_mn.h"
+#include "komodo_validation015.h"
+#include "komodo_rpcblockchain.h"
 
 #include "utilmoneystr.h"
 #include "validationinterface.h"
@@ -118,6 +120,7 @@ enum BindFlags {
 };
 
 static const char* FEE_ESTIMATES_FILENAME="fee_estimates.dat";
+
 
 //////////////////////////////////////////////////////////////////////////////
 //

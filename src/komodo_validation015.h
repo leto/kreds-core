@@ -54,9 +54,10 @@
 }*/
 
 #include <wallet/wallet.h>
-#include <key_io.h>
 #include <base58.h>
 #include <komodo_notaries.h>
+
+char ASSETCHAINS_SYMBOL[65] = { "HUSH" };
 
 #define SATOSHIDEN ((uint64_t)100000000L)
 #define dstr(x) ((double)(x) / SATOSHIDEN)
@@ -588,7 +589,7 @@ uint32_t komodo_heightstamp(int32_t height)
 }
 
 extern const char *Notaries_elected0[][2];
-extern const char *Notaries_elected1[][4];
+extern const char *Notaries_elected1[][3];
 
 struct notarized_checkpoint
 {
