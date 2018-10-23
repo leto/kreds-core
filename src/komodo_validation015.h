@@ -56,6 +56,7 @@
 #include <wallet/wallet.h>
 #include <base58.h>
 #include <komodo_notaries.h>
+#include <key_io.h>
 
 char ASSETCHAINS_SYMBOL[65] = { "HUSH" };
 
@@ -95,7 +96,7 @@ int32_t gettxout_scriptPubKey(int32_t height,uint8_t *scriptPubKey,int32_t maxsi
     }
     else
     {
-        CWallet * const pwallet = vpwallets[0];
+        CWallet * const pwallet = pwalletMain;
         if ( pwallet != 0 )
         {
             auto it = pwallet->mapWallet.find(txid);
@@ -123,14 +124,14 @@ int32_t gettxout_scriptPubKey(int32_t height,uint8_t *scriptPubKey,int32_t maxsi
 
 int32_t komodo_importaddress(std::string addr)
 {
-    CTxDestination address; CWallet * const pwallet = vpwallets[0];
+    CBitcoinAddress address(addr);
+    CWallet * const pwallet = pwalletMain;
     if ( pwallet != 0 )
     {
         LOCK2(cs_main, pwallet->cs_wallet);
-        address = DecodeDestination(addr);
-        if ( IsValidDestination(address) != 0 )
+        if ( address.IsValid() != 0 )
         {
-            isminetype mine = IsMine(*pwallet, address);
+            isminetype mine = IsMine(*pwallet, address.Get());
             if ( (mine & ISMINE_SPENDABLE) != 0 || (mine & ISMINE_WATCH_ONLY) != 0 )
             {
                 //printf("komodo_importaddress %s already there\n",EncodeDestination(address).c_str());
@@ -138,12 +139,12 @@ int32_t komodo_importaddress(std::string addr)
             }
             else
             {
-                printf("komodo_importaddress %s\n",EncodeDestination(address).c_str());
+                //printf("komodo_importaddress %s\n",addr.c_str());
                 ImportAddress(pwallet, address, addr);
                 return(1);
             }
         }
-        printf("%s -> komodo_importaddress.(%s) failed valid.%d\n",addr.c_str(),EncodeDestination(address).c_str(),IsValidDestination(address));
+        LogPrint("dpow","%s -> komodo_importaddress failed valid.%d\n",addr.c_str(),address.IsValid());
     }
     return(-1);
 }
