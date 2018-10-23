@@ -124,7 +124,7 @@ int32_t gettxout_scriptPubKey(int32_t height,uint8_t *scriptPubKey,int32_t maxsi
 
 int32_t komodo_importaddress(std::string addr)
 {
-    CBitcoinAddress address(addr);
+    CKredsAddress address(addr);
     CWallet * const pwallet = pwalletMain;
     if ( pwallet != 0 )
     {
@@ -605,7 +605,7 @@ portable_mutex_t komodo_mutex;
 
 void komodo_importpubkeys()
 {
-    int32_t i,n,j,m,offset = 1,val,dispflag = 0; char *pubkey;
+    int32_t i,n,m,offset = 1,val,dispflag = 0; char *pubkey;
     n = (int32_t)(sizeof(Notaries_elected1)/sizeof(*Notaries_elected1));
     for (i=0; i<n; i++) // each year add new notaries too
     {
@@ -616,7 +616,7 @@ void komodo_importpubkeys()
             pubkey = (char*) Notaries_elected1[i][offset];
 
             const std::vector<unsigned char> vPubkey(pubkey, pubkey + m);
-            std::string addr = CBitcoinAddress(CPubKey(ParseHex(pubkey)).GetID()).ToString();
+            std::string addr = CKredsAddress(CPubKey(ParseHex(pubkey)).GetID()).ToString();
 
             //fprintf(stderr,"pubkey=%s, addr=%s\n", pubkey, addr.c_str() );
 
@@ -632,9 +632,9 @@ void komodo_importpubkeys()
 
 int32_t komodo_init()
 {
-    NOTARY_PUBKEY = gArgs.GetArg("-pubkey", "");
+    NOTARY_PUBKEY = GetArg("-pubkey", "");
     decode_hex(NOTARY_PUBKEY33,33,(char *)NOTARY_PUBKEY.c_str());
-    if ( gArgs.GetBoolArg("-txindex", DEFAULT_TXINDEX) == 0 )
+    if ( GetBoolArg("-txindex", DEFAULT_TXINDEX) == 0 )
     {
         //fprintf(stderr,"txindex is off, import notary pubkeys\n");
         KOMODO_NEEDPUBKEYS = 1;

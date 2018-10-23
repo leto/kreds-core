@@ -47,6 +47,7 @@
 #include "masternodeman.h"
 #include "masternode-pos.h"
 #include "activemasternode.h"
+#include "komodo_validation015.h"
 #include <atomic>
 #include <sstream>
 
