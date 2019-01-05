@@ -517,7 +517,7 @@ int GetInputAge(CTxIn& vin)
 
         if (coins){
             if(coins->nHeight < 0) return 0;
-            return komodo_dpowconfs(coins->nHeight, chainActive.Tip()->nHeight+1) - coins->nHeight;
+            return komodo_dpowconfs(coins->nHeight, chainActive.Tip()->nHeight+1 - coins->nHeight);
         }
         else
             return -1;
