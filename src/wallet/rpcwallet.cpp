@@ -31,6 +31,7 @@
 #include <univalue.h>
 
 using namespace std;
+int32_t komodo_dpowconfs(int32_t height,int32_t numconfs);
 
 int64_t nWalletUnlockTime;
 static CCriticalSection cs_nWalletUnlockTime;
@@ -65,17 +66,19 @@ void WalletTxToJSON(const CWalletTx& wtx, UniValue& entry)
     int confirms = wtx.GetDepthInMainChain(false); //TODO--
     //int confirmsTotal = GetIXConfirmations(wtx.GetHash()) + confirms;
     //entry.push_back(Pair("confirmations", confirmsTotal));
-    entry.push_back(Pair("confirmations", confirms));
+    entry.push_back(Pair("rawconfirmations", confirms));
     entry.push_back(Pair("bcconfirmations", confirms));
 
     if (wtx.IsCoinBase())
         entry.push_back(Pair("generated", true));
     if (confirms > 0)
     {
+        entry.push_back(Pair("confirmations", komodo_dpowconfs((int32_t)mapBlockIndex[wtx.hashBlock]->nHeight,confirms)));
         entry.push_back(Pair("blockhash", wtx.hashBlock.GetHex()));
         entry.push_back(Pair("blockindex", wtx.nIndex));
         entry.push_back(Pair("blocktime", mapBlockIndex[wtx.hashBlock]->GetBlockTime()));
     } else {
+        entry.push_back(Pair("confirmations", confirms));
         entry.push_back(Pair("trusted", wtx.IsTrusted()));
     }
     uint256 hash = wtx.GetHash();
@@ -2667,9 +2670,13 @@ UniValue listunspent(const JSONRPCRequest& request)
             }
         }
 
+        int32_t txheight=0;
+        if ( chainActive.Tip() != NULL )
+            txheight = (chainActive.Tip()->nHeight - out.nDepth - 1);
+        entry.push_back(Pair("rawconfirmations",out.nDepth));
+        entry.push_back(Pair("confirmations",komodo_dpowconfs(txheight,out.nDepth)));
         entry.push_back(Pair("scriptPubKey", HexStr(scriptPubKey.begin(), scriptPubKey.end())));
         entry.push_back(Pair("amount", ValueFromAmount(out.tx->tx->vout[out.i].nValue)));
-        entry.push_back(Pair("confirmations", out.nDepth));
         entry.push_back(Pair("spendable", out.fSpendable));
         entry.push_back(Pair("solvable", out.fSolvable));
         results.push_back(entry);

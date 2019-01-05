@@ -90,6 +90,7 @@ size_t nCoinCacheUsage = 5000 * 300;
 uint64_t nPruneTarget = 0;
 int64_t nMaxTipAge = DEFAULT_MAX_TIP_AGE;
 bool fEnableReplacement = DEFAULT_ENABLE_REPLACEMENT;
+int32_t komodo_dpowconfs(int32_t height,int32_t numconfs);
 
 uint256 hashAssumeValid;
 
@@ -516,7 +517,7 @@ int GetInputAge(CTxIn& vin)
 
         if (coins){
             if(coins->nHeight < 0) return 0;
-            return (chainActive.Tip()->nHeight+1) - coins->nHeight;
+            return komodo_dpowconfs(coins->nHeight, chainActive.Tip()->nHeight+1) - coins->nHeight;
         }
         else
             return -1;
