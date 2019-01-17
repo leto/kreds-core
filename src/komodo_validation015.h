@@ -58,7 +58,7 @@
 #include <komodo_notaries.h>
 #include <key_io.h>
 
-char ASSETCHAINS_SYMBOL[65] = { "HUSH" };
+char ASSETCHAINS_SYMBOL[65] = { "KREDS" };
 
 #define SATOSHIDEN ((uint64_t)100000000L)
 #define dstr(x) ((double)(x) / SATOSHIDEN)
